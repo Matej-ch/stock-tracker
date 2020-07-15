@@ -6,7 +6,8 @@ use App\Product;
 use App\Retailer;
 use App\Stock;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\TestCase;
+
+use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
