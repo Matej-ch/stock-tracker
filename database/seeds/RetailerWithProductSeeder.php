@@ -16,9 +16,9 @@ class RetailerWithProductSeeder extends Seeder
     {
         //Given
         //I have product in stock
-        $switch = Product::create(['name' => 'Nintendo Switch']);
+        $switch = Product::create(['name' => 'Nintendo']);
 
-        $alza = Retailer::create(['name' => 'Best buy']);
+        $alza = Retailer::create(['name' => 'Alza']);
 
         $stock = new Stock([
             'price' => 10000,

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Http;
 
 class Stock extends Model
 {
@@ -14,12 +13,11 @@ class Stock extends Model
 
     public function track()
     {
-        //@todo load data from api
-        $result = Http::get('https://www.alza.sk/')->json();
+        $status = $this->retailer->client()->checkAvailability($this);
 
         $this->update([
-            'in_stock' => $result['available'],
-            'price' => $result['price'],
+            'in_stock' => $status->available,
+            'price' => $status->price,
         ]);
     }
 

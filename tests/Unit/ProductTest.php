@@ -17,7 +17,7 @@ class ProductTest extends TestCase
     {
         $switch = Product::create(['name' => 'Nintendo Switch']);
 
-        $alza = Retailer::create(['name' => 'Best buy']);
+        $alza = Retailer::create(['name' => 'Alza']);
 
         $this->assertFalse($switch->inStock());
 
