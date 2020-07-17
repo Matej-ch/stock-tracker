@@ -3,11 +3,9 @@
 namespace Tests\Feature;
 
 use App\Product;
-use App\Retailer;
-use App\Stock;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Http;
+use RetailerWithProductSeeder;
 use Tests\TestCase;
 
 class TrackCommandTest extends TestCase
@@ -17,37 +15,19 @@ class TrackCommandTest extends TestCase
    /** @test */
    public function it_tracks_product_stock()
    {
-        //Given
-       //I have product in stock
-       $switch = Product::create(['name' => 'Nintendo Switch']);
+       $this->seed(RetailerWithProductSeeder::class);
 
-       $alza = Retailer::create(['name' => 'Best buy']);
+        $this->assertFalse(Product::first()->inStock());
 
-       $this->assertFalse($switch->inStock());
+       Http::fake(static fn() => ['available' => true, 'price' => 29000]);
 
-       $stock = new Stock([
-           'price' => 10000,
-           'url' => 'http://www.alza.sk',
-           'sku' => '123456',
-           'in_stock' => false,
-       ]);
-
-       $alza->addStock($switch,$stock);
-       $this->assertFalse($stock->fresh()->in_stock);
-
-       Http::fake(function () {
-           return [
-               'available' => true,
-               'price' => 29000
-           ];
-       });
        //When
        // I trigger the php artisan track command
        // and assuming the stock available now
-       $this->artisan('track');
+       $this->artisan('track')->expectsOutput('Done!');
 
        //Then
        //The stock details should be refreshed
-       $this->assertTrue($stock->fresh()->in_stock);
+       $this->assertTrue(Product::first()->inStock());
    }
 }
